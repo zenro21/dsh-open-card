@@ -1,0 +1,5 @@
+# dsh-open-card bundle patch: 一个纯客户端插件。
+# `name` 必须是真实包名（cordis 按 name import 包），写错会 Cannot find package。
+- insert:
+    - id: dsh-open-card
+      name: dsh-open-card
