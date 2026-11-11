@@ -58,7 +58,7 @@ window.__ModuleLoader__.load({
       list: ['M985.6 51.2h-947.2a38.4 38.4 0 0 0 0 76.8h947.2a38.4 38.4 0 0 0 0-76.8z m-460.8 281.6h-486.4a38.4 38.4 0 0 0 0 76.8h486.4a38.4 38.4 0 0 0 0-76.8z m0 281.6h-486.4a38.4 38.4 0 0 0 0 76.8h486.4a38.4 38.4 0 0 0 0-76.8z m460.8 281.6h-947.2a38.4 38.4 0 0 0 0 76.8h947.2a38.4 38.4 0 0 0 0-76.8z m18.2016-406.8864l-275.5584-137.7792a25.6 25.6 0 0 0-37.0432 22.8864v275.5584a25.6 25.6 0 0 0 37.0432 22.8864l275.5584-137.7792a25.6 25.6 0 0 0 0-45.7728z'],
       /* 用户给的 3 号图（虚线边框 + 笔）= 边框调整。原来里面是深灰 + 品牌蓝 + 10% 底，
          这里统一成单色、去掉那层 10% 实心底（它只是原图用来压背景的）。
-         手型那张只做插件图标 icon.svg，不进按钮。 */
+         插件标识是另一张图（icon.png，睡梦美人鱼界面），不进按钮。 */
       frame: [
         "M887.815673 583.473895l-32.915462-32.915461 37.424429 37.424428z m47.795053-42.384292l3.607174 2.70538z",
         "M1009.55779 411.682241a31.562771 31.562771 0 0 0-5.861658-5.861657l-28.406494-28.406494-63.576439-65.380026a64.929129 64.929129 0 0 0-90.179346 0l-45.089673 45.089673a9.468831 9.468831 0 0 0 0 2.70538 13.076005 13.076005 0 0 0 0 15.781386s9.017935 9.919728 21.192147 22.093939c36.071738 36.973532 106.411628 106.411628 106.411628 106.411629l35.169945 35.169945 3.607174 2.254483a14.428695 14.428695 0 0 0 8.567038 0 17.584972 17.584972 0 0 0 13.526901-5.861657l41.933396-45.089673a31.562771 31.562771 0 0 0 5.861658-7.665245 63.125542 63.125542 0 0 0-3.156277-71.241683z m-34.268152 45.089673a18.035869 18.035869 0 0 1-4.508967 6.763451l-23.44663 24.79932-119.93853-119.036736 24.79932-25.250217a19.839456 19.839456 0 0 1 13.977799-5.861658 21.643043 21.643043 0 0 1 13.977798 5.861658l90.179346 90.179346a19.388559 19.388559 0 0 1 3.607174 22.544836z",
@@ -113,34 +113,55 @@ window.__ModuleLoader__.load({
          形成层叠上下文，留在里面永远压不过鲸鱼挂件一类的 high-z 浮层。 */
       '.rsz-layer{position:fixed;inset:0;z-index:2147483000;pointer-events:none}',
       '.rsz-layer > *{pointer-events:auto}',
-      /* 悬浮球必须自带实心底色：主题里的 bg-layer token 是半透明的，
-         在半透明面板/壁纸上会「隐形」，用户就以为插件没生效。 */
-      '.rsz-dock{position:fixed;right:18px;bottom:22px;z-index:2147483500;display:flex;align-items:center;gap:4px;',
-      'padding:4px 5px;border-radius:999px;pointer-events:auto;',
-      /* width:max-content 是关键：拖到右边缘时 position:fixed + left 的
-         收缩适应会把胶囊挤成一条窄带，提示文字竖着断行。 */
-      'width:max-content;max-width:calc(100vw - 12px);',
-      'background:#191c22;border:1px solid rgba(255,255,255,.18);box-shadow:0 8px 24px rgba(0,0,0,.45);',
-      'font:12px/1.2 system-ui,"Segoe UI","Microsoft YaHei",sans-serif;color:#e6e6e6}',
-      '.rsz-grip{cursor:grab;padding:0 2px;opacity:.55;font-size:13px;line-height:1;user-select:none;',
-      'touch-action:none;color:var(--dsw-alias-label-secondary,#b9bcc4)}',
-      '.rsz-grip:hover{opacity:1}',
-      '.rsz-dock[data-dragging="1"],.rsz-dock[data-dragging="1"] .rsz-grip{cursor:grabbing}',
-      '.rsz-btn{appearance:none;border:1px solid rgba(255,255,255,.16);',
-      'background:#2a2f3a;color:inherit;border-radius:999px;',
-      'padding:0;height:32px;min-width:32px;display:inline-flex;align-items:center;justify-content:center;',
-      'cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.25);transition:border-color .12s ease,background .12s ease,transform .12s ease}',
-      '.rsz-btn:hover{border-color:var(--dsw-alias-brand-primary,#2b6cf6);transform:translateY(-1px)}',
-      '.rsz-btn[data-on="1"]{background:var(--dsw-alias-brand-primary,#2b6cf6);border-color:transparent;color:#fff}',
+      /* 悬浮球是「一枚大圆 + 展开后长出的一排小圆」：
+         不用时只有大圆（不挡东西），点一下从朝屏幕里侧的方向把小圆逐颗「弹」出来，
+         再点一下缩回。必须自带实心底色——主题的 bg-layer token 是半透明的，
+         放在壁纸/半透明面板上会「隐形」，用户就以为插件没生效。
+         弹出用带回弹的贝塞尔(.34,1.56,.64,1)：先过冲一点再落位，
+         人眼才读得出「弹出来」而不是「淡出来」。 */
+      '.rsz-pod{position:fixed;z-index:2147483500;width:54px;height:54px;transform:translate(-50%,-50%);',
+      'pointer-events:none;font:12px/1.2 system-ui,"Segoe UI","Microsoft YaHei",sans-serif;color:#e6e6e6}',
+      '.rsz-pod > *{pointer-events:auto}',
+      '.rsz-orb{appearance:none;border:1px solid rgba(255,255,255,.20);background:#191c22;color:#e6e6e6;',
+      'width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0;',
+      'box-shadow:0 10px 28px rgba(0,0,0,.48);cursor:pointer;touch-action:none;will-change:transform;',
+      'transition:transform .26s cubic-bezier(.34,1.56,.64,1),background .18s ease,border-color .18s ease,box-shadow .18s ease}',
+      '.rsz-orb:hover{border-color:var(--dsw-alias-brand-primary,#2b6cf6);box-shadow:0 12px 32px rgba(0,0,0,.55)}',
+      /* 按下时先压一下：松手弹回来，点击有实体感。 */
+      '.rsz-orb:active{transform:scale(.92)}',
+      '.rsz-orb[data-open="1"]{background:var(--dsw-alias-brand-primary,#2b6cf6);border-color:transparent;color:#fff;',
+      'box-shadow:0 12px 32px rgba(43,108,246,.45)}',
+      '.rsz-orb[data-open="1"] .rsz-ico{transform:rotate(90deg);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}',
+      '.rsz-pod[data-dragging="1"] .rsz-orb{cursor:grabbing;transition:none}',
+      /* 展开方向：pod 在屏幕右半边就往左长，左半边就往右长，永远朝屏幕里侧。 */
+      '.rsz-fan{position:absolute;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;',
+      'pointer-events:none}',
+      '.rsz-pod[data-dir="left"] .rsz-fan{right:100%;margin-right:10px;align-items:flex-end;--rsz-from-x:16px}',
+      '.rsz-pod[data-dir="right"] .rsz-fan{left:100%;margin-left:10px;align-items:flex-start;--rsz-from-x:-16px}',
+      /* 收起态：小圆缩到 .3 并朝球的方向挪 16px，像从球里冒出来。 */
+      '.rsz-mini{appearance:none;border:1px solid rgba(255,255,255,.16);background:#232833;color:#e6e6e6;',
+      'width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0;',
+      'box-shadow:0 8px 22px rgba(0,0,0,.42);cursor:pointer;will-change:transform,opacity;',
+      'opacity:0;transform:translateX(var(--rsz-from-x,0)) scale(.3);pointer-events:none;',
+      'transition:opacity .13s ease,transform .17s cubic-bezier(.4,0,1,1)}',
+      '.rsz-pod[data-dir="left"] .rsz-mini{transform-origin:right center}',
+      '.rsz-pod[data-dir="right"] .rsz-mini{transform-origin:left center}',
+      /* 展开态：每颗按 --i 依次延后 45ms，形成「从球往外长」的连贯节奏。 */
+      '.rsz-pod[data-open="1"] .rsz-mini{opacity:1;transform:translateX(0) scale(1);pointer-events:auto;',
+      'transition:opacity .16s ease,transform .38s cubic-bezier(.34,1.56,.64,1);',
+      'transition-delay:calc(var(--i,0) * 45ms)}',
+      '.rsz-mini:hover{background:#2f3644;border-color:var(--dsw-alias-brand-primary,#2b6cf6);transform:scale(1.12)}',
+      '.rsz-mini:active{transform:scale(.94)}',
+      '.rsz-pod[data-open="1"] .rsz-mini[data-on="1"]{background:var(--dsw-alias-brand-primary,#2b6cf6);border-color:transparent;color:#fff}',
       '.rsz-act[data-on="1"]{background:var(--dsw-alias-brand-primary,#2b6cf6);color:#fff}',
       /* 图标统一走 currentColor，高亮/悬停时自动跟着文字变白，不用另配色。 */
-      '.rsz-ico{display:block;flex:none}',
-      '.rsz-btn .rsz-ico{pointer-events:none}',
-      '.rsz-aux{opacity:0;pointer-events:none;transition:opacity .12s ease}',
-      '.rsz-dock:hover .rsz-aux{opacity:1;pointer-events:auto}',
-      '.rsz-hint{max-width:230px;padding:7px 10px;border-radius:9px;background:#22262e;',
-      'border:1px solid rgba(255,255,255,.16);box-shadow:0 6px 20px rgba(0,0,0,.25);',
-      'color:#b9bcc4;line-height:1.5;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}',
+      '.rsz-ico{display:block;flex:none;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}',
+      '.rsz-orb .rsz-ico,.rsz-mini .rsz-ico{pointer-events:none}',
+      '.rsz-hint{position:absolute;left:50%;bottom:100%;margin-bottom:10px;transform:translateX(-50%);',
+      'max-width:240px;padding:7px 11px;border-radius:10px;background:#22262e;',
+      'border:1px solid rgba(255,255,255,.16);box-shadow:0 8px 22px rgba(0,0,0,.35);',
+      'color:#c7cbd4;line-height:1.45;white-space:nowrap;pointer-events:none;animation:rsz-pop .22s cubic-bezier(.34,1.56,.64,1)}',
+      '@keyframes rsz-pop{from{opacity:0;transform:translate(-50%,8px) scale(.9)}to{opacity:1;transform:translate(-50%,0) scale(1)}}',
       '.rsz-shield{position:fixed;inset:0;z-index:2147483400;cursor:crosshair;background:transparent}',
       '.rsz-outline{position:fixed;z-index:2147483450;pointer-events:none;box-sizing:border-box;',
       'outline:2px solid var(--dsw-alias-brand-primary,#2b6cf6);outline-offset:-2px;background:rgba(43,108,246,.10);border-radius:3px}',
@@ -946,33 +967,61 @@ window.__ModuleLoader__.load({
       }
     }
 
+    /** 悬浮球默认落点：右下角偏上一点，避开鲸鱼挂件和用量卡。 */
+    function defaultDockPos() {
+      const w = typeof window === 'undefined' ? 1280 : window.innerWidth
+      const hgt = typeof window === 'undefined' ? 800 : window.innerHeight
+      return { x: w - 60, y: hgt - 120 }
+    }
+
     function ResizerUI(props) {
       const api = props.api
       const snap = useSnapshot(api)
       /* 悬浮球的落点：默认右下角，用户拖过就记住。 */
-      const [dockPos, setDockPos] = React.useState(readDockPos)
+      const [dockPos, setDockPos] = React.useState(() => readDockPos() || defaultDockPos())
+      /* 收起态：不点开时只剩一枚大圆，避免自己变成新的遮挡源。 */
+      const [open, setOpen] = React.useState(false)
+      const [win, setWin] = React.useState(() => ({
+        w: typeof window === 'undefined' ? 1280 : window.innerWidth,
+        h: typeof window === 'undefined' ? 800 : window.innerHeight,
+      }))
+      const [dragging, setDragging] = React.useState(false)
 
+      React.useEffect(() => {
+        const onResize = () => setWin({ w: window.innerWidth, h: window.innerHeight })
+        window.addEventListener('resize', onResize)
+        return () => window.removeEventListener('resize', onResize)
+      }, [])
+
+      /* 点一下开、点一下收；拖过就不算点，避免挪位置时误开。 */
       const startDockDrag = React.useCallback((ev) => {
         if (ev.button !== 0) return
         ev.preventDefault()
         ev.stopPropagation()
-        const el = ev.currentTarget.closest('.rsz-dock')
-        if (!el) return
-        const r0 = el.getBoundingClientRect()
-        const dx0 = ev.clientX - r0.left
-        const dy0 = ev.clientY - r0.top
-        if (el.setAttribute) el.setAttribute('data-dragging', '1')
+        const x0 = ev.clientX
+        const y0 = ev.clientY
+        const p0 = dockPos
+        let moved = false
+        setDragging(true)
         const onMove = (e) => {
-          const w = el.offsetWidth || r0.width
-          const hgt = el.offsetHeight || r0.height
-          const nx = Math.max(4, Math.min(window.innerWidth - w - 4, e.clientX - dx0))
-          const ny = Math.max(4, Math.min(window.innerHeight - hgt - 4, e.clientY - dy0))
+          const dx = e.clientX - x0
+          const dy = e.clientY - y0
+          if (!moved && Math.abs(dx) + Math.abs(dy) > 4) moved = true
+          if (!moved) return
+          /* translate(-50%,-50%) 让 left/top 就是圆心，夹的时候留出半径。 */
+          const half = 27 + 4
+          const nx = Math.max(half, Math.min(window.innerWidth - half, p0.x + dx))
+          const ny = Math.max(half, Math.min(window.innerHeight - half, p0.y + dy))
           setDockPos({ x: Math.round(nx), y: Math.round(ny) })
         }
         const onUp = () => {
           window.removeEventListener('pointermove', onMove, true)
           window.removeEventListener('pointerup', onUp, true)
-          if (el.removeAttribute) el.removeAttribute('data-dragging')
+          setDragging(false)
+          if (!moved) {
+            setOpen((cur) => !cur)
+            return
+          }
           setDockPos((cur) => {
             writeDockPos(cur)
             return cur
@@ -980,43 +1029,57 @@ window.__ModuleLoader__.load({
         }
         window.addEventListener('pointermove', onMove, true)
         window.addEventListener('pointerup', onUp, true)
-      }, [])
+      }, [dockPos])
 
-      const dockStyle = dockPos
-        ? { left: dockPos.x, top: dockPos.y, right: 'auto', bottom: 'auto' }
-        : null
-      /* 记住的落点可能超出当前视口（窗口变小、提示语变长把胶囊撑宽），
-         所以渲染后按真实尺寸夹一次；提示出现/消失、按钮增减都会重算。
-         夹紧后写回 state 而不是直接改 el.style——直接改会被下一次 React
-         渲染的 style 覆盖掉，位置又跑回视口外。 */
-      const dockRef = React.useRef(null)
+      /* 不点开就自动收回：进点选/编辑态时保持展开，脱离后静置一会儿自己缩起来。
+         鼠标停在圆钮上不算「不用」，所以悬停时取消计时。 */
+      const idleTimer = React.useRef(0)
+      const cancelIdle = React.useCallback(() => {
+        if (idleTimer.current) {
+          window.clearTimeout(idleTimer.current)
+          idleTimer.current = 0
+        }
+      }, [])
+      const scheduleIdle = React.useCallback(() => {
+        cancelIdle()
+        if (!open) return
+        if (snap.picking || snap.editing || dragging) return
+        idleTimer.current = window.setTimeout(() => setOpen(false), 2400)
+      }, [open, snap.picking, snap.editing, dragging, cancelIdle])
+
       React.useEffect(() => {
-        if (!dockPos) return undefined
-        const el = dockRef.current
-        if (!el) return undefined
-        const fix = () => {
-          const w = el.offsetWidth
-          const h = el.offsetHeight
-          if (!w || !h) return
-          const nx = Math.max(4, Math.min(Math.max(4, window.innerWidth - w - 4), dockPos.x))
-          const ny = Math.max(4, Math.min(Math.max(4, window.innerHeight - h - 4), dockPos.y))
-          if (Math.abs(nx - dockPos.x) < 1 && Math.abs(ny - dockPos.y) < 1) return
-          const next = { x: Math.round(nx), y: Math.round(ny) }
-          writeDockPos(next)
-          setDockPos(next)
+        scheduleIdle()
+        return cancelIdle
+      }, [scheduleIdle, cancelIdle])
+      React.useEffect(() => () => cancelIdle(), [cancelIdle])
+
+      /* 点画面别处也收回，符合「不用时就最小化」的直觉。 */
+      React.useEffect(() => {
+        if (!open) return undefined
+        const onDown = (ev) => {
+          const t = ev.target
+          if (t && t.closest && t.closest('.rsz-pod')) return
+          setOpen(false)
         }
-        fix()
-        let ro = null
-        if (typeof ResizeObserver === 'function') {
-          ro = new ResizeObserver(fix)
-          ro.observe(el)
-        }
-        window.addEventListener('resize', fix)
-        return () => {
-          if (ro) ro.disconnect()
-          window.removeEventListener('resize', fix)
-        }
-      }, [dockPos, snap.picking, snap.editing, snap.collapsedTotal])
+        window.addEventListener('pointerdown', onDown, true)
+        return () => window.removeEventListener('pointerdown', onDown, true)
+      }, [open])
+
+      /* 展开方向：球在屏幕右半边就往左长，在左半边就往右长，永远朝屏幕里侧。 */
+      const dir = dockPos.x > win.w / 2 ? 'left' : 'right'
+      const dockStyle = { left: Math.round(dockPos.x), top: Math.round(dockPos.y) }
+      /* 窗口变小后旧落点可能跑出视口，按圆心夹回一次（半径 27 + 边距 4）。
+         夹紧后写回 state，而不是直接改 el.style——直接改会被下一次 React
+         渲染的 style 覆盖掉，位置又跑回视口外。 */
+      React.useEffect(() => {
+        const half = 31
+        const nx = Math.max(half, Math.min(Math.max(half, win.w - half), dockPos.x))
+        const ny = Math.max(half, Math.min(Math.max(half, win.h - half), dockPos.y))
+        if (Math.round(nx) === Math.round(dockPos.x) && Math.round(ny) === Math.round(dockPos.y)) return
+        const next = { x: Math.round(nx), y: Math.round(ny) }
+        writeDockPos(next)
+        setDockPos(next)
+      }, [dockPos, win])
       const actions = [
         h('button', {
           key: 'toggle-collapse',
@@ -1126,49 +1189,71 @@ window.__ModuleLoader__.load({
         }))
       }
 
-      children.push(h('div', {
-        key: 'dock',
-        'data-rsz': 'dock',
-        ref: dockRef,
-        className: 'rsz-dock',
-        style: dockStyle || undefined,
-      },
-        h('span', {
-          key: 'grip',
-          className: 'rsz-grip',
-          title: '按住拖动：把悬浮球挪到不遮挡的位置',
-          onPointerDown: startDockDrag,
-        }, '⠿'),
-        snap.picking || snap.editing
-          ? h('div', { className: 'rsz-hint' },
-            snap.picking
-              ? '点一下要调整的块；Esc 退出'
-              : '拖动边角改长宽 · Esc 取消')
-          : null,
-        h('button', {
-          key: 'clear',
-          type: 'button',
-          className: 'rsz-btn rsz-aux',
-          title: '清除所有已记住的尺寸',
-          onClick: () => { api.clearAll() },
-        }, h(Icon, { name: 'trash', size: 15 })),
-        snap.collapsedTotal > 0
-          ? h('button', {
-            key: 'expand-all',
-            type: 'button',
-            className: 'rsz-btn',
-            title: '把' + snap.collapsedTotal + ' 个收起的块全部展开，恢复原样',
-            onClick: () => { api.expandAll() },
-          }, h(Icon, { name: 'list', size: 15 }))
-          : null,
+      /* 收起态只剩一枚大圆：不用时不再占一条胶囊，点一下才从朝屏幕里侧的
+         方向把小圆一颗颗弹出来。顺序按使用频率排：点选 → 清除 → 展开全部。
+         --i 是错峰序号，CSS 用它算 transition-delay，弹出才有「依次冒出」
+         的节奏感，而不是所有圆同时闪现。 */
+      const fanItems = [
         h('button', {
           key: 'toggle',
           type: 'button',
-          className: 'rsz-btn',
+          className: 'rsz-mini',
           'data-on': snap.picking ? '1' : undefined,
-          title: '边框调整：点选任意块后拖边框改长宽（Alt+R）',
+          'data-mini': 'pick',
+          title: snap.picking ? '退出点选模式（Esc）' : '边框调整：点选任意块后拖边框改长宽（Alt+R）',
           onClick: () => api.toggleDock(),
-        }, h(Icon, { name: 'frame', size: 16 }))))
+        }, h(Icon, { name: 'frame', size: 17 })),
+        h('button', {
+          key: 'clear',
+          type: 'button',
+          className: 'rsz-mini',
+          'data-mini': 'clear',
+          title: '清除所有已记住的尺寸',
+          onClick: () => { api.clearAll() },
+        }, h(Icon, { name: 'trash', size: 16 })),
+      ]
+      if (snap.collapsedTotal > 0) {
+        fanItems.push(h('button', {
+          key: 'expand-all',
+          type: 'button',
+          className: 'rsz-mini',
+          'data-mini': 'expand',
+          title: '把 ' + snap.collapsedTotal + ' 个收起的块全部展开，恢复原样',
+          onClick: () => { api.expandAll() },
+        }, h(Icon, { name: 'list', size: 16 })))
+      }
+      /* 给每颗小圆挂上错峰序号；React 不允许直接写 --i 这种自定义属性，
+         要放进 style 对象里。 */
+      const fan = fanItems.map((node, i) => React.cloneElement(node, {
+        style: { '--i': String(i) },
+      }))
+
+      children.push(h('div', {
+        key: 'pod',
+        'data-rsz': 'pod',
+        'data-dir': dir,
+        'data-open': open ? '1' : undefined,
+        'data-dragging': dragging ? '1' : undefined,
+        className: 'rsz-pod',
+        style: dockStyle,
+        onMouseEnter: cancelIdle,
+        onMouseLeave: scheduleIdle,
+      },
+      open && (snap.picking || snap.editing)
+        ? h('div', { key: 'hint', className: 'rsz-hint' },
+          snap.picking
+            ? '点一下要调整的块；Esc 退出'
+            : '拖动边角改长宽 · Esc 取消')
+        : null,
+      h('div', { key: 'fan', className: 'rsz-fan' }, fan),
+      h('button', {
+        key: 'orb',
+        type: 'button',
+        className: 'rsz-orb',
+        'data-open': open ? '1' : undefined,
+        title: open ? '收起功能钮' : '边框调整：点一下展开功能钮（拖动可挪位置）',
+        onPointerDown: startDockDrag,
+      }, h(Icon, { name: 'frame', size: 22 }))))
 
       /* portal 到 body：脱离 shell.overlay 的 z-index:20 层叠上下文，
          否则被鲸鱼挂件这类 high-z 浮层压住，正是本插件要解决的问题。 */

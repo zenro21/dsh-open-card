@@ -31,7 +31,7 @@
 | 置前 | 提到最前，避免被别的浮层盖住 |
 | 复位 | 这一块还原成插件改动前的样子 |
 | 记忆 | 尺寸、位置、收起/滚动状态按元素持久化在 `localStorage`，刷新后自动重建 |
-| 可拖动悬浮球 | 悬浮球本身位置也可拖动并记忆，拖到边缘自动收进视口 |
+| 自动最小化的悬浮球 | 平时只留一枚大圆；点一下才有功能圆钮从朝屏幕里侧的方向逐颗弹出，点别处或静置 2.4 秒自动收回。圆钮本身可拖动并记住位置，拖到边缘自动收进视口 |
 
 ### 安装
 
@@ -44,14 +44,14 @@ git clone https://github.com/<you>/dsh-open-card.git
 plugin_manager({ action: "install_bundle", target: "<绝对路径>/dsh-open-card" })
 ```
 
-安装后刷新页面即可；右下角会出现悬浮球。
+安装后刷新页面即可；右下角会出现一枚圆形悬浮球。
 
 ### 用法
 
-1. 点右下角悬浮球，或按 `Alt+R`。
+1. 点右下角那枚圆球，功能圆钮会从朝屏幕里侧的方向弹出来（球在左半边就往右弹，在右半边就往左弹）；再点一下收起，点页面别处也会收起。
 2. 鼠标移到要调整的块上，蓝框出现后点一下。
 3. 拖 8 个控制点改长宽；顶部工具条给出收起、滚动、上溯、复位、置前、移动、取消。
-4. `Esc` 退出点选或取消选中。
+4. `Esc` 退出点选或取消选中。按住圆球可拖动，位置会被记住。
 
 ### 存储
 
@@ -67,7 +67,7 @@ plugin_manager({ action: "install_bundle", target: "<绝对路径>/dsh-open-card
 
 ### 图标
 
-插件标识与「列表 / 边框笔」图标由本项目作者提供；工具条其余六枚取自 [Bootstrap Icons](https://icons.getbootstrap.com/)（MIT），统一为 `currentColor` 单色。
+图标图片由 [@zenro21](https://github.com/zenro21) 提供；部分按钮图形取自 [Bootstrap Icons](https://icons.getbootstrap.com/)（MIT）。
 
 ### 许可证
 
@@ -100,7 +100,7 @@ Instead of guessing at other plugins' DOM structure, this plugin lets **you pick
 | Raise | Bring the block to the front so other overlays cannot cover it |
 | Reset | Restore this block to exactly how it looked before the plugin touched it |
 | Persistence | Size, offset, collapsed and scrolling state are persisted per element in `localStorage` and re-applied on reload |
-| Draggable launcher | The floating launcher can itself be dragged and remembers its position, and is nudged back inside the viewport at the edges |
+| Self-minimising launcher | At rest it is a single circle. One click pops the action buttons out toward the middle of the screen, one at a time; clicking elsewhere or idling for 2.4 s folds them back. The circle itself is draggable and remembers its position, and is nudged back inside the viewport at the edges |
 
 ### Install
 
@@ -113,14 +113,14 @@ git clone https://github.com/<you>/dsh-open-card.git
 plugin_manager({ action: "install_bundle", target: "<absolute-path>/dsh-open-card" })
 ```
 
-Reload the page afterwards; the launcher appears in the bottom-right corner.
+Reload the page afterwards; a round launcher appears in the bottom-right corner.
 
 ### Usage
 
-1. Click the launcher in the bottom-right corner, or press `Alt+R`.
+1. Click that circle and the action buttons pop out toward the middle of the screen (right when the circle sits on the left half, left when it sits on the right half). Click it again — or click anywhere else — to fold them back.
 2. Hover the block you want to resize; when the blue outline appears, click it.
 3. Drag any of the eight handles. The floating toolbar offers collapse, scroll, select-parent, reset, raise, move and deselect.
-4. `Esc` leaves pick mode or clears the selection.
+4. `Esc` leaves pick mode or clears the selection. Hold the circle to drag it; its position is remembered.
 
 ### Storage
 
@@ -136,7 +136,7 @@ Also, `shell.overlay` establishes a stacking context at `z-index: 20`, so anythi
 
 ### Icons
 
-The plugin identity icon and the list / border-pen icons are provided by the project author; the remaining six toolbar icons come from [Bootstrap Icons](https://icons.getbootstrap.com/) (MIT) and are rendered as single-colour `currentColor` glyphs.
+Icon artwork by [@zenro21](https://github.com/zenro21); some button glyphs come from [Bootstrap Icons](https://icons.getbootstrap.com/) (MIT).
 
 ### License
 

@@ -1,23 +1,23 @@
 {
   "name": "dsh-open-card",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "拖拽面板边框调整宽高：点选任意界面块，拉边框改尺寸，可复位、可记忆。",
   "type": "module",
   "main": "index.js",
-  "icon": "./icon.svg",
+  "icon": "./icon.png",
   "files": [
     "index.js",
     "client.js",
     "cordis.patch.yml",
     "locale/",
-    "icon.svg",
+    "icon.png",
     "README.md"
   ],
   "exports": {
     ".": "./index.js",
     "./client": "./client.js",
-    "./icon": "./icon.svg",
+    "./icon": "./icon.png",
     "./locale/*.json": "./locale/*.json",
     "./package.json": "./package.json"
   },
