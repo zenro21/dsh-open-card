@@ -8,6 +8,17 @@
 
 ## 中文
 
+### 预览
+
+| 收起态 | 展开态 |
+| --- | --- |
+| ![收起态：右下角只有一枚圆球](assets/screenshots/01-orb.png) | ![展开态：功能圆钮朝屏幕里侧弹出](assets/screenshots/02-orb-expanded.png) |
+
+| 整体界面 |
+| --- |
+| ![左侧栏与用量卡](assets/screenshots/03-sidebar.png) |
+| ![面板收窄后可继续使用](assets/screenshots/04-panel-compact.png) |
+
 ### 这是什么
 
 `dsh-open-card` 是 [DeepSeek Harness](https://github.com/deepseek-ai) Web UI 的一个客户端插件。它给页面上**任意**界面块加一层可拖拽的边框：点选之后拉边角改长宽，还能整体平移、置前、收起，尺寸记在浏览器里，刷新后自动恢复。
@@ -76,6 +87,17 @@ MIT
 ---
 
 ## English
+
+### Preview
+
+| Collapsed | Expanded |
+| --- | --- |
+| ![Collapsed: a single circle in the corner](assets/screenshots/01-orb.png) | ![Expanded: action buttons pop out toward the middle](assets/screenshots/02-orb-expanded.png) |
+
+| Full interface |
+| --- |
+| ![Sidebar with the usage card](assets/screenshots/03-sidebar.png) |
+| ![Panels stay usable after shrinking](assets/screenshots/04-panel-compact.png) |
 
 ### What it is
 
