@@ -1,7 +1,6 @@
 {
   "name": "dsh-open-card",
   "version": "1.2.0",
-  "private": true,
   "description": "拖拽面板边框调整宽高：点选任意界面块，拉边框改尺寸，可复位、可记忆。",
   "type": "module",
   "main": "index.js",
