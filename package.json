@@ -1,7 +1,15 @@
 {
   "name": "dsh-open-card",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "拖拽面板边框调整宽高：点选任意界面块，拉边框改尺寸，可复位、可记忆。",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zenro21/dsh-open-card.git"
+  },
+  "homepage": "https://github.com/zenro21/dsh-open-card#readme",
+  "bugs": {
+    "url": "https://github.com/zenro21/dsh-open-card/issues"
+  },
   "type": "module",
   "main": "index.js",
   "icon": "./icon.png",
