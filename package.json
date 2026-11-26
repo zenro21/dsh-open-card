@@ -1,6 +1,6 @@
 {
   "name": "dsh-open-card",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "拖拽面板边框调整宽高：点选任意界面块，拉边框改尺寸，可复位、可记忆。",
   "repository": {
     "type": "git",
@@ -20,6 +20,9 @@
     "locale/",
     "icon.png",
     "README.md",
+    "README.en.md",
+    "CHANGELOG.md",
+    "docs/",
     "assets/",
     "screenshots.json",
     "LICENSE"
